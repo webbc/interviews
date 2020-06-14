@@ -4,7 +4,7 @@
 
 ## Golang
 
-- JSON标准库对nil slice 和空slice的处理是一致的吗？
+- 1、JSON标准库对nil slice 和空slice的处理是一致的吗？
 
    不一致。对nil slice解析出来的是个null，空slice解析是一个空json数组<br>
    nil slice：只是申明了slice，但未初始化<br>
