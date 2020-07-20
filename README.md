@@ -98,6 +98,11 @@
    0xc00003c050,[Apple Orange Plum Banana Grape]
    0xc000004560,[xxxx 12]
    ``````
+   
+ - 8、make和new的区别？
+ 
+ make关键字只能用来初始化map、slice和chan类型变量
+ new关键字是根据传入的类型分配一片内存空间并返回指向这片内存空间的指针
 
 ## 算法&数据结构
 
