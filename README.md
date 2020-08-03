@@ -160,8 +160,84 @@ http://topgoer.com/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/GMP%E5%8E%9F%E7%90%86%E4
 
 ## 算法&数据结构
 
-
 ## 网络
+
+**1、TCP三次握手过程？**
+
+![三次握手](https://raw.githubusercontent.com/HIT-Alibaba/interview/master/img/tcp-connection-made-three-way-handshake.png)
+
+所谓三次握手(Three-way Handshake)，是指建立一个 TCP 连接时，需要客户端和服务器总共发送3个包。
+
+三次握手的目的是连接服务器指定端口，建立 TCP 连接，并同步连接双方的序列号和确认号，交换 TCP 窗口大小信息。在 socket 编程中，客户端执行 `connect()` 时。将触发三次握手。
+
+- 第一次握手(SYN=1, seq=x):
+
+  客户端发送一个 TCP 的 SYN 标志位置1的包，指明客户端打算连接的服务器的端口，以及初始序号 x,保存在包头的序列号(Sequence Number)字段里。
+
+  发送完毕后，客户端进入 `SYN_SEND` 状态。
+
+- 第二次握手(SYN=1, ACK=1, seq=y, ACKnum=x+1):
+
+  服务器发回确认包(ACK)应答。即 SYN 标志位和 ACK 标志位均为1。服务器端选择自己 ISN 序列号，放到 Seq 域里，同时将确认序号(Acknowledgement Number)设置为客户的 ISN 加1，即x+1。 发送完毕后，服务器端进入 `SYN_RCVD` 状态。
+
+- 第三次握手(ACK=1，ACKnum=y+1)
+
+  客户端再次发送确认包(ACK)，SYN 标志位为0，ACK 标志位为1，并且把服务器发来 ACK 的序号字段+1，放在确定字段中发送给对方，并且在数据段放写ISN的+1
+
+  发送完毕后，客户端进入 `ESTABLISHED` 状态，当服务器端接收到这个包时，也进入 `ESTABLISHED` 状态，TCP 握手结束。
+
+**2、TCP四次挥手的过程？**
+
+![三次握手](https://raw.githubusercontent.com/HIT-Alibaba/interview/master/img/tcp-connection-closed-four-way-handshake.png)
+
+
+
+TCP 的连接的关闭需要发送四个包，因此称为四次挥手(Four-way handshake)，也叫做改进的三次握手。客户端或服务器均可主动发起挥手动作，在 socket 编程中，任何一方执行 `close()` 操作即可产生挥手操作。
+
+- 第一次挥手(FIN=1，seq=x)
+
+  假设客户端想要关闭连接，客户端发送一个 FIN 标志位置为1的包，表示自己已经没有数据可以发送了，但是仍然可以接受数据。
+
+  发送完毕后，客户端进入 `FIN_WAIT_1` 状态。
+
+- 第二次挥手(ACK=1，ACKnum=x+1)
+
+  服务器端确认客户端的 FIN 包，发送一个确认包，表明自己接受到了客户端关闭连接的请求，但还没有准备好关闭连接。
+
+  发送完毕后，服务器端进入 `CLOSE_WAIT` 状态，客户端接收到这个确认包之后，进入 `FIN_WAIT_2` 状态，等待服务器端关闭连接。
+
+- 第三次挥手(FIN=1，seq=y)
+
+  服务器端准备好关闭连接时，向客户端发送结束连接请求，FIN 置为1。
+
+  发送完毕后，服务器端进入 `LAST_ACK` 状态，等待来自客户端的最后一个ACK。
+
+- 第四次挥手(ACK=1，ACKnum=y+1)
+
+  客户端接收到来自服务器端的关闭请求，发送一个确认包，并进入 `TIME_WAIT`状态，等待可能出现的要求重传的 ACK 包。
+
+  服务器端接收到这个确认包之后，关闭连接，进入 `CLOSED` 状态。
+
+  客户端等待了某个固定时间（两个最大段生命周期，2MSL，2 Maximum Segment Lifetime）之后，没有收到服务器端的 ACK ，认为服务器端已经正常关闭连接，于是自己也关闭连接，进入 `CLOSED` 状态。
+
+**3、为啥需要3次握手/4次挥手**
+
+三次握手的目的是建立可靠的通信信道，说到通讯，简单来说就是数据的发送与接收，而三次握手最主要的目的就是双方确认自己与对方的发送与接收是正常的。
+
+任何一方都可以在数据传送结束后发出连接释放的通知，待对方确认后进入半关闭状态。当另一方也没有数据再发送的时候，则发出连接释放通知，对方确认后就完全关闭了TCP连接。
+
+**4、TCP和UDP的区别？**
+
+![三次握手](https://user-gold-cdn.xitu.io/2018/4/19/162db5e97e9a9e01?imageslim)
+
+TCP：面向连接、传输可靠、传输的内容是以字节形式
+
+UDP：面向无连接、传输不可靠、传输的内容是以数据报文段形式
+
+**5、TCP的部首是啥样的？**
+
+![三次握手](https://img-blog.csdn.net/2018091917061915?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xlbmd4aWFvMTk5Mw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+
 
 
 ## 操作系统
